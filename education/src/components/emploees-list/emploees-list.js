@@ -1,7 +1,7 @@
-import EmployeesListItem from '../employees-list-item/employees-list-item';
-import './employees-list.css';
+import EmployeesListItem from '../employees-list-item/emploees-list-item';
+import './emploees-list.css';
 
-const EmployeesList = ({data, onDelete, onIncrease, onLike}) => {
+const EmploeesList = ({data, onDelete, onToggleProp}) => {
 
     const elements = data.map(item => {
         const {id, ...itemProps} = item;
@@ -10,8 +10,7 @@ const EmployeesList = ({data, onDelete, onIncrease, onLike}) => {
                 key={id} 
                 {...itemProps}
                 onDelete={() => {onDelete(id)}}
-                onIncrease={() => {onIncrease(id)}}
-                onLike={() => onLike(id)}
+                onToggleProp={(e) => {onToggleProp(id, e.currentTarget.getAttribute('data-toggle'))}}
             />        //Использование спред оператора, который сокращает написание атрибутов
         );
     });
@@ -23,4 +22,4 @@ const EmployeesList = ({data, onDelete, onIncrease, onLike}) => {
     );
 };
 
-export default EmployeesList;
+export default EmploeesList;

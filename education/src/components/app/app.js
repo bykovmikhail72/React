@@ -3,13 +3,13 @@ import { Component } from 'react';
 import AppInfo from '../app-info/app-info';
 import SearchPannel from '../search-panel/search-panel';
 import AppFilter from '../app-filter/app-filter';
-import EmployeesList from '../employees-list/employees-list';
-import EmployeesAddForm from '../emploees-add-form/emploees-add-form';
+import EmploeesList from '../emploees-list/emploees-list';
+import EmploeesAddForm from '../emploees-add-form/emploees-add-form';
 
 import './app.css';
 
 
-class App extends Component {
+export default class App extends Component {
     constructor (props) {
         super(props);
         this.state = {
@@ -17,7 +17,8 @@ class App extends Component {
                 {name: "John S.", salary: 800, increase: false, like: false, id: 1},
                 {name: "Nicolas K.", salary: 3000, increase: false, like: false, id: 2},
                 {name: "Mike W.", salary: 5000, increase: false, like: false, id: 3}
-            ]
+            ],
+            active: true
         }
         this.maxId = 4;
     }
@@ -49,63 +50,53 @@ class App extends Component {
         })
     }
 
-    increaseItem = (id) => {
-        this.setState(({data}) => {
-            const index = data.findIndex(elem => elem.id === id);
+    onToggleProp = (id, prop) => {
+        // this.setState(({data}) => {
+            // const index = data.findIndex(elem => elem.id === id);    //Первый способ изменения объекта в массиве
 
-            const oldObj = data[index];
-            const newObj = {...oldObj, increase: !oldObj.increase};
-            const newArr = [...data.slice(0, index), newObj, ...data.slice(index + 1)];
+            // const oldObj = data[index];
+            // const newObj = {...oldObj, increase: !oldObj.increase};
+            // const newArr = [...data.slice(0, index), newObj, ...data.slice(index + 1)];
 
-            return {
-                data: newArr
-            }
-        })
-    }
+            // return {
+            //     data: newArr
+            // }
+        // })
 
-    likeItem = (id) => {
-        this.setState(({data}) => {
-            const index = data.findIndex(elem => elem.id === id);
-
-            const oldObj = data[index];
-            const newObj = {...oldObj, like: !oldObj.like};
-            const newArr = [...data.slice(0, index), newObj, ...data.slice(index + 1)];
-
-            return {
-                data: newArr
-            }
-        })
-    }
-
-    //Написать одну функцию для двух функций выше
-
-    actionsItem = (id) => {
-        
+        this.setState(({data}) => ({
+            data: data.map(item => {
+                if (item.id === id) {
+                    return {...item, [prop]: !item[prop]}
+                }
+            return item;
+            })
+        }))
     }
 
     render() {
         const {data} = this.state;
+        const emploees = data.length;
+        const rise = data.filter(item => item.increase).length;
         
         return (
             <div className="app">
-                <AppInfo/>
+                <AppInfo 
+                emploees={emploees}
+                rise={rise}/>
     
                 <div className="search-panel">
                     <SearchPannel/>
                     <AppFilter/>
                 </div>
     
-                <EmployeesList 
+                <EmploeesList 
                     data={data}
                     onDelete={this.deleteItem}
-                    onIncrease={this.increaseItem}
-                    onLike={this.likeItem}/>
-                <EmployeesAddForm 
+                    onToggleProp={this.onToggleProp}/>
+                <EmploeesAddForm 
                     data={data}
                     onAdd={this.addItem}/>
             </div>
         )
     }
 };
-
-export default App;
