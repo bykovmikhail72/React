@@ -18,7 +18,7 @@ export default class App extends Component {
                 {name: "Nicolas K.", salary: 3000, increase: false, like: false, id: 2},
                 {name: "Mike W.", salary: 5000, increase: false, like: false, id: 3}
             ],
-            active: true
+            term: ''
         }
         this.maxId = 4;
     }
@@ -35,19 +35,23 @@ export default class App extends Component {
 
     addItem = (name, salary) => {
         const newObj = {
-            name,
+            name: name[0].toUpperCase() + name.substring(1).toLowerCase(),
             salary,
             increase: false,
             like: false,
             id: this.maxId++
         }
 
-        this.setState(({data}) => {
-            const newArr = [...data, newObj];
-            return {
-                data: newArr
-            }
-        })
+        if (name.length > 3 && salary.length !== '') {
+            this.setState(({data}) => {
+                const newArr = [...data, newObj];
+                return {
+                    data: newArr
+                }
+            })
+        } else {
+            alert('Пожалуйста, введите корректные данные');
+        }
     }
 
     onToggleProp = (id, prop) => {
@@ -73,24 +77,40 @@ export default class App extends Component {
         }))
     }
 
+    searchEmp = (items, term) => {
+        if (term.length === '') {
+            return items;
+        }
+
+        return items.filter(item => {
+            return item.name.indexOf(term) > -1;
+        })
+    }
+
+    onUpdateSearch = (term) => {
+        this.setState({term});
+    }
+
     render() {
-        const {data} = this.state;
+        const {data, term} = this.state;
         const emploees = data.length;
         const rise = data.filter(item => item.increase).length;
+        const visibleData = this.searchEmp(data, term);
         
         return (
             <div className="app">
                 <AppInfo 
-                emploees={emploees}
-                rise={rise}/>
+                    emploees={emploees}
+                    rise={rise}/>
     
                 <div className="search-panel">
-                    <SearchPannel/>
+                    <SearchPannel
+                        onUpdateSearch={this.onUpdateSearch}/>
                     <AppFilter/>
                 </div>
     
                 <EmploeesList 
-                    data={data}
+                    data={visibleData}
                     onDelete={this.deleteItem}
                     onToggleProp={this.onToggleProp}/>
                 <EmploeesAddForm 
