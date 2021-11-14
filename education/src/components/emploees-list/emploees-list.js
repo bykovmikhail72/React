@@ -1,5 +1,5 @@
 import EmployeesListItem from '../employees-list-item/emploees-list-item';
-import './emploees-list.css';
+import './emploees-list.sass';
 
 const EmploeesList = ({data, onDelete, onToggleProp}) => {
 

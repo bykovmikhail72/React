@@ -1,6 +1,6 @@
 
 
-import './app-info.css';
+import './app-info.sass';
 
 const AppInfo = ({emploees, rise}) => {
     return (
