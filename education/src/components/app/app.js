@@ -19,7 +19,7 @@ export default class App extends Component {
                 {name: "Mike W.", salary: 5000, increase: false, like: false, id: 3}
             ],
             term: '',
-            filter: ''
+            filter: 'all'
         }
         this.maxId = 4;
     }
